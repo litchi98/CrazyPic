@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.qq.crazypic.bean.Post;
 import com.qq.crazypic.databinding.ListItemPostBinding;
-import com.qq.crazypic.utilities.ResponseTextUtil;
 
 import javax.inject.Inject;
 
@@ -24,7 +23,7 @@ public class PostAdapter extends PagingDataAdapter<Post, PostAdapter.PostViewHol
         super(new DiffUtil.ItemCallback<Post>() {
             @Override
             public boolean areItemsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
-                return oldItem.getId().longValue() == newItem.getId().longValue();
+                return oldItem.getId() == newItem.getId();
             }
 
             @Override
@@ -48,7 +47,7 @@ public class PostAdapter extends PagingDataAdapter<Post, PostAdapter.PostViewHol
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post post = getItem(position);
         if (post != null) {
-            holder.bind(post);
+            holder.bind(post, position);
         }
     }
 
@@ -61,10 +60,9 @@ public class PostAdapter extends PagingDataAdapter<Post, PostAdapter.PostViewHol
             this.binding = binding;
         }
 
-        public void bind(@NonNull Post post) {
-            Post.TitleDTO titleDTO = post.getTitle();
-            String title = titleDTO == null ? "" : ResponseTextUtil.unescapeHtmlText(titleDTO.getRendered());
-            binding.postTitle.setText(title);
+        public void bind(@NonNull Post post, int position) {
+            binding.postTitle.setText(post.getTitle());
+            binding.postIndex.setText(String.valueOf(position));
         }
     }
 }

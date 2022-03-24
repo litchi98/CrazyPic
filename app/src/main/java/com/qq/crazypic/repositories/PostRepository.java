@@ -21,13 +21,15 @@ public class PostRepository {
     MainService mainService;
 
     @Inject
-    public PostRepository(MainService mainService) {
-        this.mainService = mainService;
+    public PostRepository() {
     }
 
     public Flowable<PagingData<Post>> getPostPageData() {
         return PagingRx.getFlowable(
-                new Pager<>(new PagingConfig(PostCountPerPage), () -> new PostPagingSource(mainService))
+                new Pager<>(
+                        new PagingConfig(PostCountPerPage),
+                        () -> new PostPagingSource(mainService)
+                )
         ).onErrorReturn(throwable -> {
             throwable.printStackTrace();
             return PagingData.empty();

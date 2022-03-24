@@ -7,7 +7,9 @@ import androidx.paging.rxjava3.RxPagingSource;
 
 import com.qq.crazypic.api.MainService;
 import com.qq.crazypic.bean.Post;
+import com.qq.crazypic.bean.PostDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
@@ -26,6 +28,24 @@ public class PostPagingSource extends RxPagingSource<Integer, Post> {
     @Nullable
     @Override
     public Integer getRefreshKey(@NonNull PagingState<Integer, Post> pagingState) {
+        Integer anchorPosition = pagingState.getAnchorPosition();
+        if (anchorPosition == null) {
+            return null;
+        }
+        LoadResult.Page<Integer, Post> anchorPage = pagingState.closestPageToPosition(anchorPosition);
+        if (anchorPage == null) {
+            return null;
+        }
+
+        Integer prevKey = anchorPage.getPrevKey();
+        if (prevKey != null) {
+            return prevKey + 1;
+        }
+
+        Integer nextKey = anchorPage.getNextKey();
+        if (nextKey != null) {
+            return nextKey - 1;
+        }
         return null;
     }
 
@@ -42,6 +62,16 @@ public class PostPagingSource extends RxPagingSource<Integer, Post> {
                 .getPosts(loadSize, page)
                 .singleOrError()
                 .subscribeOn(Schedulers.io())
+                .map(postDTOS -> {
+                    ArrayList<Post> posts = new ArrayList<>();
+                    for (PostDTO postDTO : postDTOS) {
+                        if (postDTO == null) {
+                            continue;
+                        }
+                        posts.add(new Post(postDTO));
+                    }
+                    return posts;
+                })
                 .map(posts -> getLoadResult(posts, finalPage))
                 .onErrorReturn(LoadResult.Error::new);
     }

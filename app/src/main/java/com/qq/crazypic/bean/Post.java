@@ -1,72 +1,73 @@
 package com.qq.crazypic.bean;
 
+import android.annotation.SuppressLint;
+import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-import com.google.gson.annotations.SerializedName;
+import com.qq.crazypic.utilities.CollectionUtil;
+import com.qq.crazypic.utilities.DateUtil;
+import com.qq.crazypic.utilities.ResponseTextUtil;
 
+import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Post {
 
-    @SerializedName("id")
-    private Long id;
+    @PrimaryKey
+    private long id;
 
-    @SerializedName("date")
-    private String date;
+    private long dateGmt;
 
-    @SerializedName("date_gmt")
-    private String dateGmt;
+    private String title;
 
-    @SerializedName("title")
-    private TitleDTO title;
+    private List<String> contentUrls;
 
-    @SerializedName("content")
-    private ContentDTO content;
-
-    @SerializedName("categories")
     private List<Integer> categories;
 
-    @SerializedName("tags")
-    private List<String> tags;
+    private List<Integer> tags;
 
-    public Long getId() {
+    public Post() {
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public Post(PostDTO postDTO) {
+        parseFromDTO(postDTO);
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getDateGmt() {
+    public long getDateGmt() {
         return dateGmt;
     }
 
-    public void setDateGmt(String dateGmt) {
+    public void setDateGmt(long dateGmt) {
         this.dateGmt = dateGmt;
     }
 
-    public TitleDTO getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(TitleDTO title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public ContentDTO getContent() {
-        return content;
+    public List<String> getContentUrls() {
+        return contentUrls;
     }
 
-    public void setContent(ContentDTO content) {
-        this.content = content;
+    public void setContentUrls(List<String> contentUrls) {
+        this.contentUrls = contentUrls;
     }
 
     public List<Integer> getCategories() {
@@ -77,12 +78,25 @@ public class Post {
         this.categories = categories;
     }
 
-    public List<String> getTags() {
+    public List<Integer> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<Integer> tags) {
         this.tags = tags;
+    }
+
+    public void parseFromDTO(PostDTO postDTO) {
+        if (postDTO == null) {
+            return;
+        }
+        this.id = postDTO.getId();
+        Date date = DateUtil.parse(null, postDTO.getDateGmt());
+        this.dateGmt = date == null ? 900763199L : date.getTime();
+        this.title = postDTO.getTitle() == null ? null : ResponseTextUtil.unescapeHtmlText(postDTO.getTitle().getRendered());
+        this.contentUrls = postDTO.getContent() == null ? null : ResponseTextUtil.parseImgUrl(postDTO.getContent().getRendered());
+        this.categories = postDTO.getCategories();
+        this.tags = postDTO.getTags();
     }
 
     @Override
@@ -94,44 +108,15 @@ public class Post {
         if (that == null) {
             return false;
         }
-        // TODO: 2022/3/22 判断this和that值是否相等
-        return true;
-    }
-
-    public static class TitleDTO {
-        @SerializedName("rendered")
-        private String rendered;
-
-        public String getRendered() {
-            return rendered;
+        if (that.id != this.id) {
+            return false;
         }
-
-        public void setRendered(String rendered) {
-            this.rendered = rendered;
+        if (that.dateGmt != this.dateGmt) {
+            return false;
         }
-    }
-
-    public static class ContentDTO {
-        @SerializedName("rendered")
-        private String rendered;
-
-        @SerializedName("protected")
-        private Boolean protectedX;
-
-        public String getRendered() {
-            return rendered;
+        if (TextUtils.equals(that.title, this.title)) {
+            return false;
         }
-
-        public void setRendered(String rendered) {
-            this.rendered = rendered;
-        }
-
-        public Boolean getProtectedX() {
-            return protectedX;
-        }
-
-        public void setProtectedX(Boolean protectedX) {
-            this.protectedX = protectedX;
-        }
+        return CollectionUtil.elementsEquals(that.contentUrls, this.contentUrls);
     }
 }
