@@ -6,7 +6,7 @@ import androidx.paging.PagingState;
 import androidx.paging.rxjava3.RxPagingSource;
 
 import com.qq.crazypic.api.MainService;
-import com.qq.crazypic.bean.Post;
+import com.qq.crazypic.bean.PostDetail;
 import com.qq.crazypic.bean.PostDTO;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class PostPagingSource extends RxPagingSource<Integer, Post> {
+public class PostPagingSource extends RxPagingSource<Integer, PostDetail> {
 
     private static final int POST_STARTING_PAGE_INDEX = 1;
 
@@ -27,12 +27,12 @@ public class PostPagingSource extends RxPagingSource<Integer, Post> {
 
     @Nullable
     @Override
-    public Integer getRefreshKey(@NonNull PagingState<Integer, Post> pagingState) {
+    public Integer getRefreshKey(@NonNull PagingState<Integer, PostDetail> pagingState) {
         Integer anchorPosition = pagingState.getAnchorPosition();
         if (anchorPosition == null) {
             return null;
         }
-        LoadResult.Page<Integer, Post> anchorPage = pagingState.closestPageToPosition(anchorPosition);
+        LoadResult.Page<Integer, PostDetail> anchorPage = pagingState.closestPageToPosition(anchorPosition);
         if (anchorPage == null) {
             return null;
         }
@@ -51,7 +51,7 @@ public class PostPagingSource extends RxPagingSource<Integer, Post> {
 
     @NonNull
     @Override
-    public Single<LoadResult<Integer, Post>> loadSingle(@NonNull LoadParams<Integer> loadParams) {
+    public Single<LoadResult<Integer, PostDetail>> loadSingle(@NonNull LoadParams<Integer> loadParams) {
         Integer page = loadParams.getKey();
         if (page == null) {
             page = POST_STARTING_PAGE_INDEX;
@@ -63,22 +63,22 @@ public class PostPagingSource extends RxPagingSource<Integer, Post> {
                 .singleOrError()
                 .subscribeOn(Schedulers.io())
                 .map(postDTOS -> {
-                    ArrayList<Post> posts = new ArrayList<>();
+                    ArrayList<PostDetail> postDetails = new ArrayList<>();
                     for (PostDTO postDTO : postDTOS) {
                         if (postDTO == null) {
                             continue;
                         }
-                        posts.add(new Post(postDTO));
+                        postDetails.add(new PostDetail(postDTO));
                     }
-                    return posts;
+                    return postDetails;
                 })
                 .map(posts -> getLoadResult(posts, finalPage))
                 .onErrorReturn(LoadResult.Error::new);
     }
 
-    private LoadResult<Integer, Post> getLoadResult(@NonNull List<Post> posts, int page) {
+    private LoadResult<Integer, PostDetail> getLoadResult(@NonNull List<PostDetail> postDetails, int page) {
         Integer prevPage = page == POST_STARTING_PAGE_INDEX ? null : (page - 1);
-        Integer nextPage = posts.isEmpty() ? null : (page + 1);
-        return new LoadResult.Page<>(posts, prevPage, nextPage);
+        Integer nextPage = postDetails.isEmpty() ? null : (page + 1);
+        return new LoadResult.Page<>(postDetails, prevPage, nextPage);
     }
 }

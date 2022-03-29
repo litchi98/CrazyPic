@@ -8,7 +8,7 @@ import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.qq.crazypic.bean.Post;
+import com.qq.crazypic.bean.PostDetail;
 import com.qq.crazypic.databinding.ListItemPostBinding;
 
 import javax.inject.Inject;
@@ -16,18 +16,18 @@ import javax.inject.Inject;
 import dagger.hilt.android.scopes.ActivityRetainedScoped;
 
 @ActivityRetainedScoped
-public class PostAdapter extends PagingDataAdapter<Post, PostAdapter.PostViewHolder> {
+public class PostAdapter extends PagingDataAdapter<PostDetail, PostAdapter.PostViewHolder> {
 
     @Inject
     public PostAdapter() {
-        super(new DiffUtil.ItemCallback<Post>() {
+        super(new DiffUtil.ItemCallback<PostDetail>() {
             @Override
-            public boolean areItemsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
+            public boolean areItemsTheSame(@NonNull PostDetail oldItem, @NonNull PostDetail newItem) {
                 return oldItem.getId() == newItem.getId();
             }
 
             @Override
-            public boolean areContentsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
+            public boolean areContentsTheSame(@NonNull PostDetail oldItem, @NonNull PostDetail newItem) {
                 return oldItem.equals(newItem);
             }
         });
@@ -45,9 +45,9 @@ public class PostAdapter extends PagingDataAdapter<Post, PostAdapter.PostViewHol
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-        Post post = getItem(position);
-        if (post != null) {
-            holder.bind(post, position);
+        PostDetail postDetail = getItem(position);
+        if (postDetail != null) {
+            holder.bind(postDetail, position);
         }
     }
 
@@ -60,8 +60,8 @@ public class PostAdapter extends PagingDataAdapter<Post, PostAdapter.PostViewHol
             this.binding = binding;
         }
 
-        public void bind(@NonNull Post post, int position) {
-            binding.postTitle.setText(post.getTitle());
+        public void bind(@NonNull PostDetail postDetail, int position) {
+            binding.postTitle.setText(postDetail.getTitle());
             binding.postIndex.setText(String.valueOf(position));
         }
     }

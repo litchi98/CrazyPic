@@ -2,6 +2,7 @@ package com.qq.crazypic.di;
 
 import android.app.Application;
 
+import com.google.gson.Gson;
 import com.qq.crazypic.BuildConfig;
 import com.qq.crazypic.api.MainService;
 
@@ -36,10 +37,10 @@ public class NetworkModule {
 
     @Singleton
     @Provides
-    public static MainService provideMainService(OkHttpClient okHttpClient) {
+    public static MainService provideMainService(OkHttpClient okHttpClient, Gson gson) {
         return new Retrofit.Builder()
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous())
                 .baseUrl("https://bgdmfcb.com/")
                 .build()

@@ -15,6 +15,8 @@ buildscript {
         commons_text_version = "1.9"
         paging_version = "3.1.1"
         autodispose_version = "2.1.1"
+        glide_version = "4.13.0"
+        mmkv_version = "1.2.12"
     }
     repositories {
         google()

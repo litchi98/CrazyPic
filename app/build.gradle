@@ -27,7 +27,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -93,4 +93,11 @@ dependencies {
 
     //AutoDispose
     implementation "com.uber.autodispose2:autodispose-androidx-lifecycle:$rootProject.autodispose_version"
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$rootProject.glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glide_version"
+
+    //MMKV
+    implementation "com.tencent:mmkv:$rootProject.mmkv_version"
 }
