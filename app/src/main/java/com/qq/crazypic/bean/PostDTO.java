@@ -22,10 +22,10 @@ public class PostDTO {
     private ContentDTO content;
 
     @SerializedName("categories")
-    private List<Integer> categories;
+    private List<Long> categories;
 
     @SerializedName("tags")
-    private List<Integer> tags;
+    private List<Long> tags;
 
     public long getId() {
         return id;
@@ -67,19 +67,19 @@ public class PostDTO {
         this.content = content;
     }
 
-    public List<Integer> getCategories() {
+    public List<Long> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Integer> categories) {
+    public void setCategories(List<Long> categories) {
         this.categories = categories;
     }
 
-    public List<Integer> getTags() {
+    public List<Long> getTags() {
         return tags;
     }
 
-    public void setTags(List<Integer> tags) {
+    public void setTags(List<Long> tags) {
         this.tags = tags;
     }
 

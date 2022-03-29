@@ -1,32 +1,52 @@
 package com.qq.crazypic.bean;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity
+import com.qq.crazypic.utilities.ResponseTextUtil;
+
+import java.util.List;
+
+@Entity(tableName = "post_content")
 public class PostContent {
 
-    @PrimaryKey
-    private long id;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "content_id")
+    private long contentId;
 
-    private String imgUrl;
+    @ColumnInfo(name = "content")
+    private List<String> content;
 
+    @ColumnInfo(name = "post_info_id")
     private long postInfoId;
 
-    public long getId() {
-        return id;
+    public PostContent() {
     }
 
-    public void setId(long id) {
-        this.id = id;
+    @Ignore
+    public PostContent(PostDTO.ContentDTO content) {
+        if (content == null) {
+            return;
+        }
+        this.content = ResponseTextUtil.parseImgUrl(content.getRendered());
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public long getContentId() {
+        return contentId;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setContentId(long contentId) {
+        this.contentId = contentId;
+    }
+
+    public List<String> getContent() {
+        return content;
+    }
+
+    public void setContent(List<String> content) {
+        this.content = content;
     }
 
     public long getPostInfoId() {

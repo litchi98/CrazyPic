@@ -1,29 +1,43 @@
 package com.qq.crazypic.bean;
 
+import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "post_tag")
 public class PostTag {
 
     @PrimaryKey
-    private long id;
+    @ColumnInfo(name = "tag_id")
+    private long tagId;
 
-    private String name;
+    @Nullable
+    @ColumnInfo(name = "tag_name")
+    private String tagName;
 
-    public long getId() {
-        return id;
+    public PostTag() {
     }
 
-    public void setId(long id) {
-        this.id = id;
+    @Ignore
+    public PostTag(long tagId) {
+        this.tagId = tagId;
     }
 
-    public String getName() {
-        return name;
+    public long getTagId() {
+        return tagId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTagId(long tagId) {
+        this.tagId = tagId;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 }

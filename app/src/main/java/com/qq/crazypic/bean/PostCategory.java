@@ -1,28 +1,42 @@
 package com.qq.crazypic.bean;
 
+import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "post_category")
 public class PostCategory {
     @PrimaryKey
-    private long id;
+    @ColumnInfo(name = "category_id")
+    private long categoryId;
 
-    private String name;
+    @ColumnInfo(name = "category_name")
+    @Nullable
+    private String categoryName;
 
-    public long getId() {
-        return id;
+    public PostCategory() {
     }
 
-    public void setId(long id) {
-        this.id = id;
+    @Ignore
+    public PostCategory(long categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getName() {
-        return name;
+    public long getCategoryId() {
+        return categoryId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

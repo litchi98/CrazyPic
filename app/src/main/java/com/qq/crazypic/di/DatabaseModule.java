@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.room.Room;
 
 import com.qq.crazypic.db.PostDatabase;
-import com.qq.crazypic.db.dao.PostDao;
+import com.qq.crazypic.db.dao.PostDetailDao;
 
 import javax.inject.Singleton;
 
@@ -29,7 +29,7 @@ public class DatabaseModule {
     }
 
     @Provides
-    public static PostDao providePostDao(PostDatabase postDatabase) {
+    public static PostDetailDao providePostDao(PostDatabase postDatabase) {
         return postDatabase.postDao();
     }
 }

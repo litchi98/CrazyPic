@@ -23,7 +23,7 @@ public class PostAdapter extends PagingDataAdapter<PostDetail, PostAdapter.PostV
         super(new DiffUtil.ItemCallback<PostDetail>() {
             @Override
             public boolean areItemsTheSame(@NonNull PostDetail oldItem, @NonNull PostDetail newItem) {
-                return oldItem.getId() == newItem.getId();
+                return oldItem.getPostInfo().getId() == newItem.getPostInfo().getId();
             }
 
             @Override
@@ -61,7 +61,7 @@ public class PostAdapter extends PagingDataAdapter<PostDetail, PostAdapter.PostV
         }
 
         public void bind(@NonNull PostDetail postDetail, int position) {
-            binding.postTitle.setText(postDetail.getTitle());
+            binding.postTitle.setText(postDetail.getPostInfo().getTitle());
             binding.postIndex.setText(String.valueOf(position));
         }
     }
